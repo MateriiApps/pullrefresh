@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
 
-subprojects {
+allprojects {
     group = "dev.materii.pullrefresh"
     version = "1.0.0"
 
