@@ -74,15 +74,16 @@ publishing {
     }
 }
 
-if(sonatypeUsername != null && sonatypePassword != null) {
+if (sonatypeUsername != null && sonatypePassword != null) {
     signing {
         useInMemoryPgpKeys(
             System.getenv("SIGNING_KEY_ID"),
             System.getenv("SIGNING_KEY"),
-            System.getenv("SIGNING_KEY_PASSWORD")
+            System.getenv("SIGNING_PASSWORD"),
         )
         sign(publishing.publications)
     }
+
 
     val dependsOnTasks = mutableListOf<String>()
     tasks.withType<AbstractPublishToMaven>().configureEach {
