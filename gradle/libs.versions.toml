@@ -1,7 +1,7 @@
 [versions]
 agp = "8.2.0-alpha15"
 kotlin = "1.8.21"
-compose-multiplatform = "1.5.0-beta01"
+compose-multiplatform = "1.5.0"
 compose-compiler = "1.4.7"
 core-ktx = "1.10.1"
 
@@ -9,7 +9,7 @@ core-ktx = "1.10.1"
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.6.1" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.7.2" }
-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.1.1" }
+material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.0-alpha04" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

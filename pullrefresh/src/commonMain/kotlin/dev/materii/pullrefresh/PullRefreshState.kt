@@ -107,10 +107,10 @@ class PullRefreshState internal constructor(
     private val adjustedDistancePulled by derivedStateOf { distancePulled * DragMultiplier }
 
     private var _refreshing by mutableStateOf(false)
-    private var _position by mutableFloatStateOf(0f)
-    private var distancePulled by mutableFloatStateOf(0f)
-    private var _threshold by mutableFloatStateOf(threshold)
-    private var _refreshingOffset by mutableFloatStateOf(refreshingOffset)
+    private var _position by mutableStateOf(0f)
+    private var distancePulled by mutableStateOf(0f)
+    private var _threshold by mutableStateOf(threshold)
+    private var _refreshingOffset by mutableStateOf(refreshingOffset)
 
     internal fun onPull(pullDelta: Float): Float {
         if (_refreshing) return 0f // Already refreshing, do nothing.
