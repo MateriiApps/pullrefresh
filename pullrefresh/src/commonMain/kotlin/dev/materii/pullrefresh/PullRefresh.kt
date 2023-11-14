@@ -35,11 +35,14 @@ import androidx.compose.ui.unit.Velocity
  * @param state The [PullRefreshState] associated with this pull-to-refresh component.
  * The state will be updated by this modifier.
  * @param enabled If not enabled, all scroll delta and fling velocity will be ignored.
+ * @param inverse If true, then this will be instead activated from the bottom of a scrollable
+ * container instead of the top.
  */
 // TODO(b/244423199): Move pullRefresh into its own material library similar to material-ripple.
 fun Modifier.pullRefresh(
     state: PullRefreshState,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    inverse: Boolean = false,
 ) = inspectable(
     inspectorInfo = debugInspectorInfo {
         name = "pullRefresh"
@@ -47,7 +50,7 @@ fun Modifier.pullRefresh(
         properties["enabled"] = enabled
     }
 ) {
-    Modifier.pullRefresh(state::onPull, state::onRelease, enabled)
+    Modifier.pullRefresh(state::onPull, state::onRelease, enabled, inverse)
 }
 
 /**
@@ -69,11 +72,14 @@ fun Modifier.pullRefresh(
  * pullRefresh. This is invoked before any remaining velocity is passed to the child.
  * @param enabled If not enabled, all scroll delta and fling velocity will be ignored and neither
  * [onPull] nor [onRelease] will be invoked.
+ * @param inverse If true, then this will be instead activated from the bottom of a scrollable
+ * container instead of the top.
  */
 fun Modifier.pullRefresh(
     onPull: (pullDelta: Float) -> Float,
     onRelease: suspend (flingVelocity: Float) -> Float,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    inverse: Boolean = false,
 ) = inspectable(
     inspectorInfo = debugInspectorInfo {
         name = "pullRefresh"
@@ -82,13 +88,14 @@ fun Modifier.pullRefresh(
         properties["enabled"] = enabled
     }
 ) {
-    Modifier.nestedScroll(PullRefreshNestedScrollConnection(onPull, onRelease, enabled))
+    Modifier.nestedScroll(PullRefreshNestedScrollConnection(onPull, onRelease, enabled, inverse))
 }
 
 private class PullRefreshNestedScrollConnection(
     private val onPull: (pullDelta: Float) -> Float,
     private val onRelease: suspend (flingVelocity: Float) -> Float,
-    private val enabled: Boolean
+    private val enabled: Boolean,
+    private val inverse: Boolean,
 ) : NestedScrollConnection {
 
     override fun onPreScroll(
@@ -96,7 +103,8 @@ private class PullRefreshNestedScrollConnection(
         source: NestedScrollSource
     ): Offset = when {
         !enabled -> Offset.Zero
-        source == Drag && available.y < 0 -> Offset(0f, onPull(available.y)) // Swiping up
+        !inverse && source == Drag && available.y < 0 -> Offset(0f, onPull(available.y)) // Swiping up
+        inverse && source == Drag && available.y > 0 -> Offset(0f, onPull(-available.y)) // Swiping down when inverse
         else -> Offset.Zero
     }
 
@@ -106,7 +114,8 @@ private class PullRefreshNestedScrollConnection(
         source: NestedScrollSource
     ): Offset = when {
         !enabled -> Offset.Zero
-        source == Drag && available.y > 0 -> Offset(0f, onPull(available.y)) // Pulling down
+        !inverse && source == Drag && available.y > 0 -> Offset(0f, onPull(available.y)) // Pulling down
+        inverse && source == Drag && available.y < 0 -> Offset(0f, onPull(-available.y)) // Pulling up when inverse
         else -> Offset.Zero
     }
 
