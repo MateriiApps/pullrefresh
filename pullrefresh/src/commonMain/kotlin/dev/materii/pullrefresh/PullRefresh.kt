@@ -48,6 +48,7 @@ fun Modifier.pullRefresh(
         name = "pullRefresh"
         properties["state"] = state
         properties["enabled"] = enabled
+        properties["inverse"] = inverse
     }
 ) {
     Modifier.pullRefresh(state::onPull, state::onRelease, enabled, inverse)
@@ -86,6 +87,7 @@ fun Modifier.pullRefresh(
         properties["onPull"] = onPull
         properties["onRelease"] = onRelease
         properties["enabled"] = enabled
+        properties["inverse"] = inverse
     }
 ) {
     Modifier.nestedScroll(PullRefreshNestedScrollConnection(onPull, onRelease, enabled, inverse))
