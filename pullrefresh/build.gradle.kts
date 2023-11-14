@@ -93,10 +93,13 @@ if (sonatypeUsername != null && sonatypePassword != null) {
 }
 
 kotlin {
-    android {
+    applyDefaultHierarchyTemplate()
+
+    androidTarget {
         publishLibraryVariants("release")
     }
-    ios()
+    iosX64()
+    iosArm64()
     iosSimulatorArm64()
     jvmToolchain(17)
     jvm("desktop")
