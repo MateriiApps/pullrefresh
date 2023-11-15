@@ -30,10 +30,12 @@ import androidx.compose.ui.platform.inspectable
  *
  * @param state The [PullRefreshState] which determines the position of the indicator.
  * @param scale A boolean controlling whether the indicator's size scales with pull progress or not.
+ * @param flipped Whether the indicator is drawn emanating from the bottom instead.
  */
 fun Modifier.pullRefreshIndicatorTransform(
     state: PullRefreshState,
     scale: Boolean = false,
+    flipped: Boolean = false,
 ) = inspectable(
     inspectorInfo = debugInspectorInfo {
         name = "pullRefreshIndicatorTransform"
@@ -50,16 +52,20 @@ fun Modifier.pullRefreshIndicatorTransform(
         // only ever really want to clip at the top edge.
         .drawWithContent {
             clipRect(
-                top = 0f,
+                top = if (!flipped) 0f else -Float.MAX_VALUE,
                 left = -Float.MAX_VALUE,
                 right = Float.MAX_VALUE,
-                bottom = Float.MAX_VALUE
+                bottom = if (!flipped) Float.MAX_VALUE else size.height,
             ) {
                 this@drawWithContent.drawContent()
             }
         }
         .graphicsLayer {
-            translationY = state.position - size.height
+            translationY = if (!flipped) {
+                state.position - size.height
+            } else {
+                -state.position + size.height
+            }
 
             if (scale && !state.refreshing) {
                 val scaleFraction = LinearOutSlowInEasing
