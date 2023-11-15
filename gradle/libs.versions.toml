@@ -9,7 +9,7 @@ core-ktx = "1.12.0"
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.6.2" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.8.0" }
-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.0-alpha10" }
+material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.0-alpha09" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

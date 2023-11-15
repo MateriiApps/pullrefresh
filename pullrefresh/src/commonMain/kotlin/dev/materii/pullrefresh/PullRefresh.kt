@@ -36,7 +36,8 @@ import androidx.compose.ui.unit.Velocity
  * The state will be updated by this modifier.
  * @param enabled If not enabled, all scroll delta and fling velocity will be ignored.
  * @param inverse If true, then this will be instead activated from the bottom of a scrollable
- * container instead of the top.
+ * container instead of the top. **NOTE:** Overscroll **MUST** be disabled on the scrollable
+ * container for this to work. (`LocalOverscrollConfiguration provides null`)
  */
 // TODO(b/244423199): Move pullRefresh into its own material library similar to material-ripple.
 fun Modifier.pullRefresh(
@@ -74,7 +75,8 @@ fun Modifier.pullRefresh(
  * @param enabled If not enabled, all scroll delta and fling velocity will be ignored and neither
  * [onPull] nor [onRelease] will be invoked.
  * @param inverse If true, then this will be instead activated from the bottom of a scrollable
- * container instead of the top.
+ * container instead of the top. **NOTE:** Overscroll **MUST** be disabled on the scrollable
+ * container for this to work. (`LocalOverscrollConfiguration provides null`)
  */
 fun Modifier.pullRefresh(
     onPull: (pullDelta: Float) -> Float,
