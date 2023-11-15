@@ -53,6 +53,8 @@ import kotlin.math.*
  * @param backgroundColor The color of the indicator's background.
  * @param contentColor The color of the indicator's arc and arrow.
  * @param scale A boolean controlling whether the indicator's size scales with pull progress or not.
+ * @param flipped Whether the indicator is drawn emanating from the bottom instead.
+ *                This should be used with the `inverse` param of `pullRefresh`.
  */
 @Composable
 fun PullRefreshIndicator(
@@ -61,7 +63,8 @@ fun PullRefreshIndicator(
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.White,
     contentColor: Color = Color.Blue,
-    scale: Boolean = false
+    scale: Boolean = false,
+    flipped: Boolean = false,
 ) {
     val showElevation by remember(refreshing, state) {
         derivedStateOf { refreshing || state.position > 0.5f }
@@ -70,7 +73,7 @@ fun PullRefreshIndicator(
     Box(
         modifier = modifier
             .size(IndicatorSize)
-            .pullRefreshIndicatorTransform(state, scale)
+            .pullRefreshIndicatorTransform(state, scale, flipped)
             .shadow(if (showElevation) Elevation else 0.dp, SpinnerShape, clip = true)
             .background(color = backgroundColor, shape = SpinnerShape)
     ) {
