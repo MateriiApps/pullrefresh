@@ -3,7 +3,9 @@ package dev.materii.pullrefresh.demo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -25,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import dev.materii.pullrefresh.DragRefreshLayout
 import dev.materii.pullrefresh.PullRefreshIndicator
 import dev.materii.pullrefresh.demo.theme.SwipeRefreshTheme
 import dev.materii.pullrefresh.demo.theme.applyTonalElevation
@@ -65,24 +68,32 @@ class MainActivity : ComponentActivity() {
                             )
                         )
                     },
-                    modifier = Modifier.pullRefresh(pullRefreshState)
+                    contentWindowInsets = WindowInsets(0),
+                    modifier = Modifier.pullRefresh(pullRefreshState, inverse = true)
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
+                    DragRefreshLayout(
+                        state = pullRefreshState,
+                        flipped = true,
                         modifier = Modifier
                             .padding(it)
                             .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
                     ) {
-                        Text(text = "Pull down to refresh")
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Text(text = "Pull up to refresh")
 
-                        PullRefreshIndicator(
-                            refreshing = isRefreshing,
-                            state = pullRefreshState,
-                            backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
-                            contentColor = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.align(Alignment.TopCenter)
-                        )
+//                        PullRefreshIndicator(
+//                            refreshing = isRefreshing,
+//                            state = pullRefreshState,
+//                            backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+//                            contentColor = MaterialTheme.colorScheme.primary,
+//                            modifier = Modifier.align(Alignment.TopCenter)
+//                        )
+                        }
                     }
                 }
             }
