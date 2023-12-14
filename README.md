@@ -25,7 +25,14 @@ materii-pullrefresh = { group = "dev.materii.pullrefresh", name = "pullrefresh",
 ```
 
 ### Basic setup
-> See the [demo project](https://github.com/MateriiApps/pullrefresh/blob/main/demo/src/main/java/dev/materii/pullrefresh/demo/MainActivity.kt).
+
+#### Pull to refresh
+> See the [sample](https://github.com/MateriiApps/pullrefresh/blob/main/demo/src/main/java/dev/materii/pullrefresh/demo/sample/PullRefreshSample.kt).
+
+| Default | Flipped |
+| ------- | ------- |
+| <img src="/.github/images/pullrefresh.gif" alt="Pull refresh demo" width="200px"> | <img src="/.github/images/pullrefresh-flipped.gif" alt="Flipped pull refresh demo" width="200px"> |
+
 ```kt
 @Composable
 fun Test() {
@@ -50,6 +57,42 @@ fun Test() {
         modifier = Modifier.align(Alignment.TopCenter)
       )
   }
+}
+```
+
+#### Drag to refresh
+> See the [sample](https://github.com/MateriiApps/pullrefresh/blob/main/demo/src/main/java/dev/materii/pullrefresh/demo/sample/DragRefreshSample.kt).
+
+| Default | Flipped |
+| ------- | ------- |
+| <img src="/.github/images/dragrefresh.gif" alt="Drag refresh demo" width="200px"> | <img src="/.github/images/dragrefresh-flipped.gif" alt="Flipped drag refresh demo" width="200px"> |
+
+```kt
+@Composable
+fun Test() {
+  var isRefreshing by remember {
+      mutableStateOf(false)
+  }
+  var pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = { /* Refresh some data here */ })
+
+  Scaffold(
+      modifier = Modifier.pullRefresh(pullRefreshState)
+  ) {
+    DragRefreshLayout(
+      state = pullRefreshState
+      modifier = modifier
+            .padding(it)
+            .fillMaxSize()
+    ) {
+      Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
+      ) {
+        Text("Some content")
+      }
+    }
 }
 ```
 
