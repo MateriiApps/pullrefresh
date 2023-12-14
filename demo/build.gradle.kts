@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
     implementation(libs.material3)
+    implementation(libs.material.icons.extended)
 
     implementation(project(":pullrefresh"))
 }
