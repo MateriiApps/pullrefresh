@@ -25,8 +25,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -42,7 +45,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
 
 /**
  * The default indicator for Compose pull-to-refresh, based on Android's SwipeRefreshLayout.
@@ -210,17 +216,6 @@ private fun DrawScope.drawArrow(
         drawPath(path = arrow, color = color, alpha = alpha)
     }
 }
-
-private const val CrossfadeDurationMs = 100
-private const val MaxProgressArc = 0.8f
-
-private val IndicatorSize = 40.dp
-private val SpinnerShape = CircleShape
-private val ArcRadius = 7.5.dp
-private val StrokeWidth = 2.5.dp
-private val ArrowWidth = 10.dp
-private val ArrowHeight = 5.dp
-private val Elevation = 6.dp
 
 // Values taken from SwipeRefreshLayout
 private const val MinAlpha = 0.3f

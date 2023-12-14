@@ -3,14 +3,22 @@ package dev.materii.pullrefresh.demo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Flip
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -20,37 +28,41 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import dev.materii.pullrefresh.PullRefreshIndicator
+import dev.materii.pullrefresh.demo.sample.DragRefreshSample
+import dev.materii.pullrefresh.demo.sample.PullRefreshSample
 import dev.materii.pullrefresh.demo.theme.SwipeRefreshTheme
-import dev.materii.pullrefresh.demo.theme.applyTonalElevation
-import dev.materii.pullrefresh.rememberPullRefreshState
 import dev.materii.pullrefresh.pullRefresh
+import dev.materii.pullrefresh.rememberPullRefreshState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
+            var flipped by remember { mutableStateOf(false) }
+            val pagerState = rememberPagerState { 2 }
             val scope = rememberCoroutineScope()
             var isRefreshing by remember {
                 mutableStateOf(false)
             }
-            val pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = {
-                scope.launch {
-                    isRefreshing = true
-                    delay(3_000)
-                    isRefreshing = false
+            val pullRefreshState = rememberPullRefreshState(
+                refreshing = isRefreshing,
+                onRefresh = {
+                    scope.launch {
+                        isRefreshing = true
+                        delay(3_000)
+                        isRefreshing = false
+                    }
                 }
-            })
+            )
 
             SwipeRefreshTheme {
                 Scaffold(
@@ -58,31 +70,75 @@ class MainActivity : ComponentActivity() {
                         TopAppBar(
                             title = { Text(stringResource(R.string.app_name)) },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.applyTonalElevation(
-                                    backgroundColor = MaterialTheme.colorScheme.surface,
-                                    elevation = 3.dp
-                                )
-                            )
+                                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+                            ),
+                            actions = {
+                                IconToggleButton(
+                                    checked = flipped,
+                                    onCheckedChange = { checked -> flipped = checked },
+                                    colors = IconButtonDefaults.iconToggleButtonColors(
+                                        checkedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(
+                                            alpha = 0.5f
+                                        )
+                                    )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Flip,
+                                        contentDescription = "Flip"
+                                    )
+                                }
+                            }
                         )
                     },
-                    modifier = Modifier.pullRefresh(pullRefreshState)
+                    modifier = Modifier
+                        .pullRefresh(pullRefreshState, inverse = flipped)
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .padding(it)
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
+                    Column(
+                        modifier = Modifier.padding(it)
                     ) {
-                        Text(text = "Pull down to refresh")
+                        PrimaryTabRow(
+                            selectedTabIndex = pagerState.currentPage,
+                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                            divider = {}
+                        ) {
+                            Tab(
+                                text = { Text("Pull to refresh") },
+                                selected = pagerState.currentPage == 0,
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(0)
+                                    }
+                                }
+                            )
 
-                        PullRefreshIndicator(
-                            refreshing = isRefreshing,
-                            state = pullRefreshState,
-                            backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
-                            contentColor = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.align(Alignment.TopCenter)
-                        )
+                            Tab(
+                                text = { Text("Drag to refresh") },
+                                selected = pagerState.currentPage == 1,
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(1)
+                                    }
+                                }
+                            )
+                        }
+
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier.fillMaxSize()
+                        ) { page ->
+                            when (page) {
+                                0 -> PullRefreshSample(
+                                    flipped = flipped,
+                                    pullRefreshState = pullRefreshState,
+                                    isRefreshing = isRefreshing
+                                )
+
+                                1 -> DragRefreshSample(
+                                    flipped = flipped,
+                                    pullRefreshState = pullRefreshState
+                                )
+                            }
+                        }
                     }
                 }
             }
