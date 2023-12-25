@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.materii.pullrefresh.PullRefreshLayout
 import dev.materii.pullrefresh.PullRefreshIndicator
 import dev.materii.pullrefresh.PullRefreshState
 
@@ -18,27 +19,27 @@ import dev.materii.pullrefresh.PullRefreshState
 fun PullRefreshSample(
     flipped: Boolean,
     pullRefreshState: PullRefreshState,
-    isRefreshing: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+    PullRefreshLayout(
+        modifier = modifier,
+        state = pullRefreshState,
+        indicator = {
+            PullRefreshIndicator(
+                state = pullRefreshState,
+                flipped = flipped,
+                backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                contentColor = MaterialTheme.colorScheme.primary
+            )
+        }
     ) {
-        Text(text = "Pull ${if (flipped) "up" else "down"} to refresh")
-
-        PullRefreshIndicator(
-            refreshing = isRefreshing,
-            state = pullRefreshState,
-            flipped = flipped,
-            backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
-            contentColor = MaterialTheme.colorScheme.primary,
+        Box(
             modifier = Modifier
-                .align(
-                    if (flipped) Alignment.BottomCenter else Alignment.TopCenter
-                )
-        )
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "Pull ${if (flipped) "up" else "down"} to refresh")
+        }
     }
 }

@@ -62,6 +62,19 @@ import kotlin.math.pow
  * @param flipped Whether the indicator is drawn emanating from the bottom instead.
  *                This should be used with the `inverse` param of `pullRefresh`.
  */
+@Deprecated(
+    message = "Use the overload without `refreshing` instead",
+    replaceWith = ReplaceWith(
+        "PullRefreshIndicator(" +
+            "state = state,\n" +
+            "modifier = modifier,\n" +
+            "backgroundColor = backgroundColor,\n" +
+            "contentColor = contentColor,\n" +
+            "scale = scale,\n" +
+            "flipped = flipped," +
+        ")"
+    )
+)
 @Composable
 fun PullRefreshIndicator(
     refreshing: Boolean,
@@ -71,9 +84,26 @@ fun PullRefreshIndicator(
     contentColor: Color = Color.Blue,
     scale: Boolean = false,
     flipped: Boolean = false,
+) = PullRefreshIndicator(
+    state = state,
+    modifier = modifier,
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    scale = scale,
+    flipped = flipped
+)
+
+@Composable
+fun PullRefreshIndicator(
+    state: PullRefreshState,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.White,
+    contentColor: Color = Color.Blue,
+    scale: Boolean = false,
+    flipped: Boolean = false,
 ) {
-    val showElevation by remember(refreshing, state) {
-        derivedStateOf { refreshing || state.position > 0.5f }
+    val showElevation by remember(state) {
+        derivedStateOf { state.refreshing || state.position > 0.5f }
     }
 
     Box(
@@ -84,7 +114,7 @@ fun PullRefreshIndicator(
             .background(color = backgroundColor, shape = SpinnerShape)
     ) {
         Crossfade(
-            targetState = refreshing,
+            targetState = state.refreshing,
             animationSpec = tween(durationMillis = CrossfadeDurationMs),
             label = "Refresh"
         ) { refreshing ->
