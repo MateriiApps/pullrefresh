@@ -134,9 +134,7 @@ fun DragRefreshLayout(
                 }
             }
         }
-        val indicatorAlignment = remember(flipped) {
-            if (flipped) Alignment.BottomCenter else Alignment.TopCenter
-        }
+        val indicatorAlignment = if (flipped) Alignment.BottomCenter else Alignment.TopCenter
         Box(
             modifier = Modifier
                 .background(backdropColor)
