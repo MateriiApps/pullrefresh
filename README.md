@@ -36,27 +36,17 @@ materii-pullrefresh = { group = "dev.materii.pullrefresh", name = "pullrefresh",
 ```kt
 @Composable
 fun Test() {
-  var isRefreshing by remember {
-      mutableStateOf(false)
-  }
-  var pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = { /* Refresh some data here */ })
+    var isRefreshing by remember {
+        mutableStateOf(false)
+    }
+    var pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = { /* Refresh some data here */ })
 
-  Scaffold(
-      modifier = Modifier.pullRefresh(pullRefreshState)
-  ) {
-    Box(
-      contentAlignment = Alignment.Center,
-      modifier = Modifier
-        .padding(it)
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState())
+    PullRefreshLayout(
+        modifier = modifier,
+        state = pullRefreshState
     ) {
-      PullRefreshIndicator(
-        refreshing = isRefreshing,
-        state = pullRefreshState,
-        modifier = Modifier.align(Alignment.TopCenter)
-      )
-  }
+        Text("Some content")
+    }
 }
 ```
 
@@ -70,28 +60,16 @@ fun Test() {
 ```kt
 @Composable
 fun Test() {
-  var isRefreshing by remember {
-      mutableStateOf(false)
-  }
-  var pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = { /* Refresh some data here */ })
+    var isRefreshing by remember {
+       mutableStateOf(false)
+    }
+    var pullRefreshState = rememberPullRefreshState(refreshing = isRefreshing, onRefresh = { /* Refresh some data here */ })
 
-  Scaffold(
-      modifier = Modifier.pullRefresh(pullRefreshState)
-  ) {
     DragRefreshLayout(
-      state = pullRefreshState
-      modifier = modifier
-            .padding(it)
-            .fillMaxSize()
+        modifier = modifier,
+        state = pullRefreshState
     ) {
-      Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-          .fillMaxSize()
-          .verticalScroll(rememberScrollState())
-      ) {
         Text("Some content")
-      }
     }
 }
 ```
