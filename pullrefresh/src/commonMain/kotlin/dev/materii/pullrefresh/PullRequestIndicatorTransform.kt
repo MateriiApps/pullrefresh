@@ -41,6 +41,7 @@ fun Modifier.pullRefreshIndicatorTransform(
         name = "pullRefreshIndicatorTransform"
         properties["state"] = state
         properties["scale"] = scale
+        properties["flipped"] = flipped
     }
 ) {
     Modifier

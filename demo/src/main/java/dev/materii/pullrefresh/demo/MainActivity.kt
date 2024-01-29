@@ -90,8 +90,7 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     },
-                    modifier = Modifier
-                        .pullRefresh(pullRefreshState, inverse = flipped)
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     Column(
                         modifier = Modifier.padding(it)
@@ -130,12 +129,13 @@ class MainActivity : ComponentActivity() {
                                 0 -> PullRefreshSample(
                                     flipped = flipped,
                                     pullRefreshState = pullRefreshState,
-                                    isRefreshing = isRefreshing
+                                    modifier = Modifier.fillMaxSize(),
                                 )
 
                                 1 -> DragRefreshSample(
                                     flipped = flipped,
-                                    pullRefreshState = pullRefreshState
+                                    pullRefreshState = pullRefreshState,
+                                    modifier = Modifier.fillMaxSize(),
                                 )
                             }
                         }
