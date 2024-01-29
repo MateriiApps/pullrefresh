@@ -22,6 +22,7 @@ fun DragRefreshSample(
     DragRefreshLayout(
         modifier = modifier,
         state = pullRefreshState,
+        flipped = flipped,
         indicator = {
             DragRefreshIndicator(
                 state = pullRefreshState,

@@ -24,6 +24,7 @@ fun PullRefreshSample(
     PullRefreshLayout(
         modifier = modifier,
         state = pullRefreshState,
+        flipped = flipped,
         indicator = {
             PullRefreshIndicator(
                 state = pullRefreshState,
