@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group = "dev.materii.pullrefresh"
-    version = "1.3.0"
+    version = "1.4.0-beta01"
 
     repositories {
         repositories {
