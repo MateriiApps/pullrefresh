@@ -39,6 +39,8 @@ fun PullRefreshLayout(
             )
             .then(modifier)
     ) {
+        content()
+
         val indicatorAlignment = if (flipped) Alignment.BottomCenter else Alignment.TopCenter
         Box(
             modifier = Modifier
@@ -48,7 +50,5 @@ fun PullRefreshLayout(
         ) {
             indicator()
         }
-
-        content()
     }
 }
