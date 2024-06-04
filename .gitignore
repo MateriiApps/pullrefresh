@@ -31,3 +31,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Kotlin cache folder used by kotlin 2.0.0
+.kotlin
