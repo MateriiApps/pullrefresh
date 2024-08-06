@@ -136,6 +136,7 @@ class MainActivity : ComponentActivity() {
                                     flipped = flipped,
                                     pullRefreshState = pullRefreshState,
                                     modifier = Modifier.fillMaxSize(),
+                                    isRefreshing = isRefreshing
                                 )
                             }
                         }
