@@ -2,7 +2,6 @@
 agp = "8.2.2"
 kotlin = "2.0.0"
 compose-multiplatform = "1.6.11"
-compose-compiler = "1.5.8"
 core-ktx = "1.13.1"
 
 [libraries]
