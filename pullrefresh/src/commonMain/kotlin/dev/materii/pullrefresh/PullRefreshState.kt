@@ -134,13 +134,15 @@ class PullRefreshState internal constructor(
             // We are flinging without having dragged the pull refresh (for example a fling inside
             // a list) - don't consume
             distancePulled == 0f -> 0f
-            velocity < 0f -> if (isRefreshTiming) {
-                // We need to prevent the fling upward when the refresh starts.
-                velocity
-            }else {
-                // If the velocity is negative, the fling is upwards, and we don't want to prevent
-                // the list from scrolling
-                0f
+            velocity < 0f -> {
+                if (isRefreshTiming) {
+                    // We need to prevent the fling upward when the refresh starts.
+                    velocity
+                } else {
+                    // If the velocity is negative, the fling is upwards, and we don't want to prevent
+                    // the list from scrolling
+                    0f
+                }
             }
             // We are showing the indicator, and the fling is downwards - consume everything
             else -> velocity

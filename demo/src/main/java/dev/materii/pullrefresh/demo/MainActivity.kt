@@ -135,8 +135,7 @@ class MainActivity : ComponentActivity() {
                                 1 -> DragRefreshSample(
                                     flipped = flipped,
                                     pullRefreshState = pullRefreshState,
-                                    modifier = Modifier.fillMaxSize(),
-                                    isRefreshing = isRefreshing
+                                    modifier = Modifier.fillMaxSize()
                                 )
                             }
                         }
